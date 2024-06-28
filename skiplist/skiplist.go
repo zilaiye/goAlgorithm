@@ -87,27 +87,27 @@ func (sl *SkipList) Delete(value int) {
 
 func (sl *SkipList) Search(value int) *Node {
 	//update := make([]*Node, sl.maxLevel)
-	//current := sl.head
-	//for i := sl.maxLevel - 1; i >= 0; i-- {
-	//	if current.next[i] == nil {
-	//		continue
-	//	}
-	//	current = current.next[i]
-	//	for current != nil && current.value < value {
-	//		current = current.next[i]
-	//	}
-	//}
-
-	prev, next := sl.head, sl.head
-
+	current := sl.head
 	for i := sl.maxLevel - 1; i >= 0; i-- {
-		next = prev.next[i]
-		for next != nil && next.value < value {
-			prev = next
-			next = next.next[i]
+		if current == nil {
+			continue
+		}
+		//current = current.next[i]
+		for current != nil && current.value < value {
+			current = current.next[i]
 		}
 	}
-	current := next
+
+	//prev, next := sl.head, sl.head
+	//
+	//for i := sl.maxLevel - 1; i >= 0; i-- {
+	//	next = prev.next[i]
+	//	for next != nil && next.value < value {
+	//		prev = next
+	//		next = next.next[i]
+	//	}
+	//}
+	//current := next
 
 	if current == nil || current.value != value {
 		fmt.Println("not found!!!", value)
@@ -125,4 +125,15 @@ func (sl *SkipList) String() string {
 		values = append(values, current.next[0].value)
 	}
 	return fmt.Sprintf("%v\n", values)
+}
+
+func (sl *SkipList) PrintList() {
+	for i := sl.maxLevel - 1; i >= 0; i-- {
+		current := sl.head.next[i]
+		fmt.Printf("print level %d \n", i)
+		for current != nil {
+			fmt.Println(current.value)
+			current = current.next[i]
+		}
+	}
 }
